@@ -1,13 +1,14 @@
-import { FC, useState } from "react";
+import { FC, useState, useRef } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import BenifitList from "./parts/BenifitList";
 import StickerList from "./parts/StickerList";
 import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
-import { patchProduct as patchProduct } from "../../api/product";
+import { patchProduct } from "../../api/product";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
+
 
 // Баг в проде технодома. Если кликнуть на плюс быстро два раза то значение после ответа сервера увелится лишь на 1
 export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
@@ -23,14 +24,34 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
   const notifyNotImplemented = () => {notifyError("Not implemented")}
 
 
+  const operations = useRef<{
+    payload: number,
+    confirmed: boolean,
+  }[]>([])
+
+
   const incrementHandler = async (): Promise<void> => {
+    const newProduct = {...product, quantity: product.quantity + 1}
+    console.log(1);
+    operations.current.push({payload: newProduct.quantity, confirmed: false})
+    setProduct(newProduct)
     try {
-      const newProduct = {...product, quantity: product.quantity + 1}
       const patchedProduct = await patchProduct(newProduct)
-      setProduct(patchedProduct)
+      const requestToConfirm = operations.current.find(request => request.payload === patchedProduct.quantity)
+      requestToConfirm!.confirmed = true;
+
+      console.log(2);
+      setProduct({...product, stickers: patchedProduct.stickers, benifits: patchedProduct.benifits})
 
       notifySuccess('Success')
     } catch (error) {
+      // UI revert
+      const revertedQuantity = operations.current.reduce((revertedQuantity, currentValue) => {
+        return revertedQuantity + (currentValue.payload * -1);
+      }, product.quantity);
+      setProduct({...product, quantity: revertedQuantity})
+      operations.current.filter(operation => !operation.confirmed)
+
       notifyError('Some network error occurred')
     }
   }
@@ -147,4 +168,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
 
 
   return isMobile ? mobileLayout : desktopLayout;
+}
+function ref(arg0: never[]) {
+  throw new Error("Function not implemented.");
 }
