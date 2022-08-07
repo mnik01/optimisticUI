@@ -22,6 +22,7 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
   const notifyNotImplemented = () => {notifyError("Not implemented")}
 
 
+
   const incrementHandler = async (): Promise<void> => {
     setIsLoading(true);
     try {
@@ -42,6 +43,7 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
       notifyNotImplemented()
       return;
     }
+    setIsLoading(true);
     try {
       const newProduct = {...product, quantity: product.quantity - 1}
       const patchedProduct = await patchProduct(newProduct)
@@ -50,6 +52,8 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
       notifySuccess('Success')
     } catch (error) {
       notifyError('Some network error occurred')
+    } finally {
+      setIsLoading(false);
     }
   }
   // TODO: implement animations
