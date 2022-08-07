@@ -4,9 +4,9 @@ import BenifitList from "./parts/BenifitList";
 import StickerList from "./parts/StickerList";
 import { Benifits, Stickers } from "./types";
 
-type CardProps = {}
+type CardProps = { foreceMobile?: boolean }
 
-export const Card: FC<CardProps> = () => {
+export const Card: FC<CardProps> = ({ foreceMobile }) => {
   const isMobile = useIsMobile();
   const stickers: Stickers = [
     {
@@ -59,20 +59,28 @@ export const Card: FC<CardProps> = () => {
         </div>
         <button className="uppercase w-full h-5 text-[8px] text-[#B2B2B2] font-bold tracking-widest text-center py-1">удалить</button>
       </div>
-      <main className="content flex flex-col gap-1 w-full">
-        <StickerList stickers={stickers} />
-        <h2 style={{color: '#404040'}} className="text-base font-[700]">Пылесос Tefal TW-7272EA</h2>
-        <span className="flex items-end gap-1">
-          <p className="text-sm text-[#B2B2B2] font-bold h-5 flex items-end">94 990 тг.</p>
-          <p className="text-[10px] font-medium line-through text-[#B2B2B2] h-5 flex items-end leading-[15px]">121 990 тг.</p>
-        </span>
-        <BenifitList benifits={benifits} />
+      <main className="flex justify-between w-full">
+        <div className="flex flex-col gap-1">
+          <StickerList stickers={stickers} />
+          <h2 style={{color: '#404040'}} className="text-base font-[700]">Пылесос Tefal TW-7272EA</h2>
+          <span className="flex items-end gap-1">
+            <p className="text-sm text-[#B2B2B2] font-bold h-5 flex items-end">94 990 тг.</p>
+            <p className="text-[10px] font-medium line-through text-[#B2B2B2] h-5 flex items-end leading-[15px]">121 990 тг.</p>
+          </span>
+          <BenifitList benifits={benifits} />
+        </div>
+        <div className='flex items-center'>
+          <span className="flex flex-col gap-1">
+            <p className="text-xl font-bold text-orange-400 h-5 flex items-end leading-[15px]">121 990 тг.</p>
+            <p className="text-[10px] text-[#737171] font-medium h-5 flex line-through justify-end">94 990 тг.</p>
+          </span>
+        </div>
       </main>
       <div className="counter flex flex-col justify-between">
       <button className="w-[32px] flex justify-center">
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input className="w-[32px] flex justify-center text-center text-[#161616] font-bold" value="1" />
+        <input className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value="1" />
         <button className="w-[32px] flex justify-center">
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
@@ -83,7 +91,7 @@ export const Card: FC<CardProps> = () => {
     <article className="
       w-[304px]
       rounded-2xl bg-white py-[8px]
-      min-h-[112px] flex gap-4
+      min-h-[112px] flex
       justify-between
     ">
       <div className="max-h-24 flex flex-col w-full">
@@ -110,13 +118,17 @@ export const Card: FC<CardProps> = () => {
         <button className="w-[32px] flex justify-center">
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input className="w-[32px] flex justify-center text-center text-[#161616] font-bold" value="1" />
+        <input className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value="1" />
         <button className="w-[32px] flex justify-center">
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
     </article>
   )
+
+  if (foreceMobile) {
+    return mobileLayout;
+  }
 
 
   return isMobile ? mobileLayout : desktopLayout;

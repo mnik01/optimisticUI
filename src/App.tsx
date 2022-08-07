@@ -18,6 +18,21 @@ export default function App() {
         <p className="text-xs text-gray-500">Product Card optimistic</p>
         <Card />
       </div>
+      <hr />
+      <div className="flex gap-12">
+        <div>
+          <p className="text-xs text-gray-500">Mobile Product Card non-optimistic (currently on &nbsp;<a className="text-blue-300" href="https://www.technodom.kz">technodom.kz</a>)</p>
+          <Card foreceMobile />
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Mobile Product Card non-optimistic with loaders</p>
+          <Card foreceMobile />
+        </div>
+        <div>
+          <p className="text-xs text-gray-500">Mobile Product Card optimistic</p>
+          <Card foreceMobile />
+        </div>
+      </div>
     </div>
   )
 }
