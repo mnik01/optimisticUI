@@ -23,5 +23,5 @@ export type Product = {
     oldPrice?: number,
   },
   imgPath: string,
-  initialQuantity: number,
+  quantity: number,
 }

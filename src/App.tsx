@@ -6,43 +6,11 @@ import { Product } from "./components/Card/types";
 
 export default function App() {
   const product: Product = {
-    benifits: [
-      {
-        text: '-22%',
-        backgroundColor: "#73BE6F",
-      },
-      {
-        text: 'В комплекте',
-        backgroundColor: "#5283FC",
-      },
-      {
-        text: 'Подарок',
-        backgroundColor: "#F55151",
-      }
-    ],
-    stickers: [
-      {
-        icon: '../../assets/icons/digitalProduct.svg',
-        text: "Цифровой товар",
-        color: "#42BBF8",
-        backgroundColor: "#FFFFFF"
-      },
-      {
-        icon: '../../assets/icons/esdProduct.svg',
-        text: "С витрины",
-        color: "#404040",
-        backgroundColor: "#F7F7F7"
-      },
-      {
-        icon: '../../assets/icons/cascadeProduct.svg',
-        text: "Каскадная скидка",
-        color: "#73BE6F",
-        backgroundColor: "#FFFFFF"
-      }
-    ],
+    benifits: [],
+    stickers: [],
     name: "Пылесос Tefal TW-7272EA",
     imgPath: "../../assets/product.png",
-    initialQuantity: 1,
+    quantity: 1,
     sku: "2864",
     pricesPerOne: {
       price: 94_990,
