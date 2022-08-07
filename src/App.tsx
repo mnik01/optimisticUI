@@ -2,6 +2,8 @@ import Card from "./components/Card";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Product } from "./components/Card/types";
+import CardLoaders from "./components/CardLoaders";
+import CardOptimistic from "./components/CardOptimistic";
 
 
 export default function App() {
@@ -30,11 +32,11 @@ export default function App() {
         </div>
         <div>
           <p className="text-xs text-gray-500">Product Card non-optimistic with loaders</p>
-          <Card product={product} />
+          <CardLoaders product={product} />
         </div>
         <div>
           <p className="text-xs text-gray-500">Product Card optimistic</p>
-          <Card product={product} />
+          <CardOptimistic product={product} />
         </div>
         <hr />
         <div className="flex gap-12">
@@ -44,11 +46,11 @@ export default function App() {
           </div>
           <div>
             <p className="text-xs text-gray-500">Mobile Product Card non-optimistic with loaders</p>
-            <Card product={product} foreceMobile />
+            <CardLoaders product={product} foreceMobile />
           </div>
           <div>
             <p className="text-xs text-gray-500">Mobile Product Card optimistic</p>
-            <Card product={product} foreceMobile />
+            <CardOptimistic product={product} foreceMobile />
           </div>
         </div>
       </div>

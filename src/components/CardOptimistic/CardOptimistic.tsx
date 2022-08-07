@@ -10,7 +10,7 @@ import { patchProduct as patchProduct } from "../../api/product";
 type CardProps = { foreceMobile?: boolean, product: Product }
 
 // Баг в проде технодома. Если кликнуть на плюс быстро два раза то значение после ответа сервера увелится лишь на 1
-export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
+export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
   const isMobile = useIsMobile();
   const [product, setProduct] = useState(initialProduct);
 

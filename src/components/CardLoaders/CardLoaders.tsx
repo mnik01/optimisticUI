@@ -9,14 +9,13 @@ import { patchProduct as patchProduct } from "../../api/product";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
 
-// Баг в проде технодома. Если кликнуть на плюс быстро два раза то значение после ответа сервера увелится лишь на 1
-export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
+export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
   const isMobile = useIsMobile();
   const [product, setProduct] = useState(initialProduct);
+  const [isLoading, setIsLoading] = useState(false);
 
   const priceTotal = product.pricesPerOne.price * product.quantity;
   const oldPriceTotal = product.pricesPerOne.oldPrice ? product.pricesPerOne.oldPrice * product.quantity : null;
-
 
   const notifySuccess = (text: string) => toast(text, {type: "success"});
   const notifyError = (text: string) => toast(text, {type: "error"});
@@ -24,6 +23,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
 
 
   const incrementHandler = async (): Promise<void> => {
+    setIsLoading(true);
     try {
       const newProduct = {...product, quantity: product.quantity + 1}
       const patchedProduct = await patchProduct(newProduct)
@@ -32,6 +32,8 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
       notifySuccess('Success')
     } catch (error) {
       notifyError('Some network error occurred')
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -50,7 +52,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
       notifyError('Some network error occurred')
     }
   }
-
+  // TODO: implement animations
   const desktopLayout = (
     <article className="
       lg:w-[768px] w-[656px]
@@ -68,7 +70,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
       </div>
       <main className="flex justify-between w-full">
         <div className="flex justify-center flex-col gap-1">
-          <StickerList stickers={product.stickers} />
+          <div className={isLoading ? 'opacity-20' : ''}><StickerList stickers={product.stickers} /></div>
           <div>
             <h2 style={{color: '#404040'}} className="text-base font-[700]">{product.name}</h2>
             <span className="flex items-end gap-1">
@@ -78,7 +80,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
               <p className="text-[10px] font-medium line-through text-[#B2B2B2] h-5 flex items-end leading-[15px]">{formatPrice(product.pricesPerOne.price)}</p>
             </span>
           </div>
-          <BenifitList benifits={product.benifits} />
+          <div className={isLoading ? 'opacity-20' : ''}><BenifitList benifits={product.benifits} /></div>
         </div>
         <div className='flex items-center'>
           <span className="flex flex-col gap-1">
@@ -90,11 +92,11 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
         </div>
       </main>
       <div className="counter flex flex-col justify-between">
-        <button onClick={incrementHandler} className="w-[32px] flex justify-center">
+        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
-        <button onClick={decrementHandler} className="w-[32px] flex justify-center">
+        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
+        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
@@ -130,11 +132,11 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
         </footer>
       </div>
       <div className="counter flex flex-col justify-between">
-        <button onClick={incrementHandler} className="w-[32px] flex justify-center">
+        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
-        <button onClick={decrementHandler} className="w-[32px] flex justify-center">
+        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
+        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
