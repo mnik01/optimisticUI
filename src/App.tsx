@@ -5,7 +5,7 @@ import { Product } from "./components/Card/types";
 import CardLoaders from "./components/CardLoaders";
 import CardOptimistic from "./components/CardOptimistic";
 import { useEffect, useState } from "react";
-import { useIsMobile } from "./hooks/useIsMobile";
+import { isMobile } from "react-device-detect";
 import { submitPolling } from "./api/polling";
 
 // TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
@@ -34,7 +34,6 @@ export default function App() {
   const toggleCaseHandler = () => {
     setIsNegativeCase(!isNegativeCase)
   }
-  const isMobile = useIsMobile();
 
   const [selectedVariant, setSelectedVariant] = useState<null | string>(null)
   const [votes, setVotes] = useState<null | {value: string, percent: number}[]>(null)
