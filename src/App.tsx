@@ -4,12 +4,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Product } from "./components/Card/types";
 import CardLoaders from "./components/CardLoaders";
 import CardOptimistic from "./components/CardOptimistic";
+import { useEffect, useState } from "react";
 
 // TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
 // TODO: hide desktop in mobile design
 // TODO: add input implementation
 // TODO: add polling
-// TODO: add negative case
 
 export default function App() {
   const product: Product = {
@@ -24,7 +24,15 @@ export default function App() {
       oldPrice: 121_990,
     }
   }
+  const [isNegativeCase, setIsNegativeCase] = useState(false)
+  useEffect(() => {
+    // @ts-ignore
+    window.isNegativeCase = isNegativeCase
+  }, [isNegativeCase])
 
+  const toggleCaseHandler = () => {
+    setIsNegativeCase(!isNegativeCase)
+  }
 
 
 
@@ -63,7 +71,9 @@ export default function App() {
           </div>
         </div>
         <div className="flex gap-8 justify-center">
-          <button className="text-[#2196f3] font-light outline-1">Посмотреть на bad-case</button>
+          <button onClick={toggleCaseHandler} className="text-[#2196f3] font-light outline-1">{
+            isNegativeCase ? "Вернуться к положительному кейсу" : "Показать негативный кейс"
+          }</button>
           <a href="https://simonhearne.com/2021/optimistic-ui-patterns/#feedback-first" className="text-[#2196f3] font-light outline-1">Прочитать про optimistic UI</a>
         </div>
       </div>

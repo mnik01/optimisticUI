@@ -41,6 +41,10 @@ export const patchProduct = async (product: Product): Promise<Product> => {
 
   const { quantity } = product
 
+  // @ts-ignore
+  if (window.isNegativeCase) {
+    throw new Error('Thats fine')
+  }
 
   if (quantity === 2) {
     return {
