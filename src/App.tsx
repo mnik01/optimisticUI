@@ -50,7 +50,11 @@ export default function App() {
   return (
     <div>
       <div className="p-8 min-w-fit flex flex-col gap-8 bg-gray-100">
-        <h1 className="min-w-fit bg-gray-100 text-[48px] font-bold text-gray-00">Карточка товара</h1>
+        <div>
+          <h1 className="min-w-fit bg-gray-100 text-[48px] font-bold text-gray-00">Карточка товара</h1>
+          <p>Попробуй быстро добавить через + несколько товаров за раз и увидишь разницу в подходах</p>
+          <p className="text-xs text-gray-600">В первом подходе если за раз попытаться прибавить несколько товаров то добавится только один</p>
+        </div>
         <div className="flex items-center gap-8">
           {
             !isMobile &&
