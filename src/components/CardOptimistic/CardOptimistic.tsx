@@ -6,6 +6,8 @@ import { FC, useState, useRef } from "react";
 import { toast } from 'react-toastify';
 import { Product } from "./types";
 import { debounce } from "lodash";
+import Minus from "../Icons/minus";
+import Plus from "../Icons/plus";
 
 type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean }
 
@@ -150,7 +152,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, isMobile, product:
           onClick={incrementHandler}
           className={`${opacity.counter} transition w-[32px] flex justify-center`}
         >
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus />
         </button>
         <input
           disabled={isFetching}
@@ -165,7 +167,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, isMobile, product:
           onClick={decrementHandler}
           className={`${opacity.counter} transition w-[32px] flex justify-center`}
         >
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus />
         </button>
       </div>
     </article>
@@ -201,11 +203,11 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, isMobile, product:
       </div>
       <div className="counter flex flex-col justify-between">
         <button disabled={isFetching} onClick={incrementHandler} className={`transition w-[32px] flex justify-center ${opacity.counter}`}>
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus size={20} />
         </button>
         <input disabled={isFetching} onChange={notifyNotImplemented} className={`transition w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${opacity.counter}`} value={product.quantity} />
         <button disabled={isFetching} onClick={decrementHandler} className={`transition w-[32px] flex justify-center ${opacity.counter}`}>
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus size={20} />
         </button>
       </div>
     </article>

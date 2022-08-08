@@ -16,19 +16,19 @@ const benifits = [
 ]
 const stickers =  [
   {
-    icon: '../../assets/icons/digitalProduct.svg',
+    icon: 'digitalProduct',
     text: "Цифровой товар",
     color: "#42BBF8",
     backgroundColor: "#FFFFFF"
   },
   {
-    icon: '../../assets/icons/esdProduct.svg',
+    icon: 'esdProduct',
     text: "С витрины",
     color: "#404040",
     backgroundColor: "#F7F7F7"
   },
   {
-    icon: '../../assets/icons/cascadeProduct.svg',
+    icon: 'cascadeProduct',
     text: "Каскадная скидка",
     color: "#73BE6F",
     backgroundColor: "#FFFFFF"

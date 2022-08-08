@@ -16,13 +16,13 @@ export default function App() {
   const product: Product = {
     benifits: [],
     stickers: [],
-    name: "Пылесос Tefal TW-7272EA",
-    imgPath: "../../assets/product.png",
+    name: "Смартфон Redmi 9A 32GB Grey",
+    imgPath: "https://api.technodom.kz/f3/api/v1/images/800/800/226119_1.jpg",
     quantity: 1,
     sku: "2864",
     pricesPerOne: {
-      price: 94_990,
-      oldPrice: 121_990,
+      price: 49_990,
+      oldPrice: 59_990,
     }
   }
   const [isNegativeCase, setIsNegativeCase] = useState(false)

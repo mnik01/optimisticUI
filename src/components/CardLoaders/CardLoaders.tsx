@@ -5,6 +5,8 @@ import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
+import Minus from "../Icons/minus";
+import Plus from "../Icons/plus";
 
 type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean}
 
@@ -93,11 +95,11 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, isMobile, product: in
       </main>
       <div className="counter flex flex-col justify-between">
         <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus />
         </button>
         <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold transition ${!isLoading || 'cursor-not-allowed opacity-20'}`} value={product.quantity} />
         <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus />
         </button>
       </div>
     </article>
@@ -133,11 +135,11 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, isMobile, product: in
       </div>
       <div className="counter flex flex-col justify-between">
         <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus size={20} />
         </button>
         <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold transition ${!isLoading || 'cursor-not-allowed opacity-20'}`} value={product.quantity} />
         <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus size={20} />
         </button>
       </div>
     </article>

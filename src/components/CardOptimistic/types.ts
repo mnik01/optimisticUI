@@ -1,5 +1,5 @@
 export type Sticker = {
-  icon: string,
+  icon: "digitalProduct" | "esdProduct" | "cascadeProduct",
   text: string,
   color: string,
   backgroundColor: string,

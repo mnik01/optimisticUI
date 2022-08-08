@@ -5,6 +5,8 @@ import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
+import Plus from "../Icons/plus";
+import Minus from "../Icons/minus";
 
 type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean}
 
@@ -107,11 +109,11 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct, isM
       </main>
       <div className="counter flex flex-col justify-between">
         <button onClick={incrementHandler} className="w-[32px] flex justify-center">
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus />
         </button>
         <input onChange={inputChangeHandler} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
         <button onClick={decrementHandler} className="w-[32px] flex justify-center">
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus />
         </button>
       </div>
     </article>
@@ -147,11 +149,11 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct, isM
       </div>
       <div className="counter flex flex-col justify-between">
         <button onClick={incrementHandler} className="w-[32px] flex justify-center">
-          <img src="../../assets/icons/plus.svg" alt="increase button image" />
+          <Plus size={20} />
         </button>
         <input onChange={inputChangeHandler} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
         <button onClick={decrementHandler} className="w-[32px] flex justify-center">
-          <img src="../../assets/icons/minus.svg" alt="decrease button image" />
+          <Minus size={20} />
         </button>
       </div>
     </article>
