@@ -6,14 +6,16 @@ import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
+import { debounce } from "lodash";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
 
 
-// Баг в проде технодома. Если кликнуть на плюс быстро два раза то значение после ответа сервера увелится лишь на 1
+
 export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
   const isMobile = useIsMobile();
   const [product, setProduct] = useState(initialProduct);
+  const [uiBlockStatus, setUiBlockStatus] = useState<"clicking" | 'fetching' | null>(null);
 
   const priceTotal = product.pricesPerOne.price * product.quantity;
   const oldPriceTotal = product.pricesPerOne.oldPrice ? product.pricesPerOne.oldPrice * product.quantity : null;
@@ -23,37 +25,45 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
   const notifyError = (text: string) => toast(text, {type: "error"});
   const notifyNotImplemented = () => {notifyError("Not implemented")}
 
+  const operations = useRef<number[]>([]);
+  const currentUiQuantity = useRef(product.quantity);
 
-  const operations = useRef<{
-    payload: number,
-    confirmed: boolean,
-  }[]>([])
+  const debouncedHandler = useRef(debounce(async () => {
+    setUiBlockStatus('fetching')
+
+    try {
+      const { stickers, benifits } =  await patchProduct({...product, quantity: currentUiQuantity.current})
+      setProduct({ ...product, stickers, benifits, quantity: currentUiQuantity.current })
+      notifySuccess("Success")
+    } catch (err) {
+      // UI revert
+      let revertDelta = operations.current.map(x => x * -1).reduce((a, b) => a + b, 0);
+      const revertedQuantity = currentUiQuantity.current + revertDelta;
+
+      setProduct({...product, quantity: revertedQuantity})
+      currentUiQuantity.current = revertedQuantity;
+
+      notifyError('Some network error occurred')
+    } finally {
+      operations.current = [];
+      setUiBlockStatus(null)
+    }
+  }, 1000)).current;
 
 
   const incrementHandler = async (): Promise<void> => {
-    const newProduct = {...product, quantity: product.quantity + 1}
-    console.log(1);
-    operations.current.push({payload: newProduct.quantity, confirmed: false})
+    setUiBlockStatus('clicking');
+
+    const newQuantity = product.quantity + 1;
+    const newProduct = {...product, quantity: newQuantity}
+
+    // Optimisticly update UI
     setProduct(newProduct)
-    try {
-      const patchedProduct = await patchProduct(newProduct)
-      const requestToConfirm = operations.current.find(request => request.payload === patchedProduct.quantity)
-      requestToConfirm!.confirmed = true;
+    currentUiQuantity.current++;
+    operations.current.push(1);
 
-      console.log(2);
-      setProduct({...product, stickers: patchedProduct.stickers, benifits: patchedProduct.benifits})
-
-      notifySuccess('Success')
-    } catch (error) {
-      // UI revert
-      const revertedQuantity = operations.current.reduce((revertedQuantity, currentValue) => {
-        return revertedQuantity + (currentValue.payload * -1);
-      }, product.quantity);
-      setProduct({...product, quantity: revertedQuantity})
-      operations.current.filter(operation => !operation.confirmed)
-
-      notifyError('Some network error occurred')
-    }
+    // Batch requests
+    debouncedHandler()
   }
 
   const decrementHandler = async (): Promise<void> => {
@@ -61,16 +71,22 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
       notifyNotImplemented()
       return;
     }
-    try {
-      const newProduct = {...product, quantity: product.quantity - 1}
-      const patchedProduct = await patchProduct(newProduct)
-      setProduct(patchedProduct)
+    setUiBlockStatus('clicking');
 
-      notifySuccess('Success')
-    } catch (error) {
-      notifyError('Some network error occurred')
-    }
+    const newQuantity = product.quantity - 1;
+    const newProduct = {...product, quantity: newQuantity}
+
+    // Optimisticly update UI
+    setProduct(newProduct)
+    currentUiQuantity.current--;
+    operations.current.push(-1);
+
+    // Batch requests
+    debouncedHandler()
   }
+
+  const isInteracting = uiBlockStatus === 'clicking';
+  const isFetching = uiBlockStatus === 'fetching';
 
   const desktopLayout = (
     <article className="
@@ -88,7 +104,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
         <button onClick={notifyNotImplemented} className="uppercase w-full h-5 text-[8px] text-[#B2B2B2] font-bold tracking-widest text-center py-1">удалить</button>
       </div>
       <main className="flex justify-between w-full">
-        <div className="flex justify-center flex-col gap-1">
+        <div className={`transition flex justify-center flex-col gap-1 ${uiBlockStatus ? 'opacity-20' : ''}`}>
           <StickerList stickers={product.stickers} />
           <div>
             <h2 style={{color: '#404040'}} className="text-base font-[700]">{product.name}</h2>
@@ -110,12 +126,12 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
           </span>
         </div>
       </main>
-      <div className="counter flex flex-col justify-between">
-        <button onClick={incrementHandler} className="w-[32px] flex justify-center">
+      <div className={`transition counter flex flex-col justify-between ${isFetching ? 'opacity-20' : ''}`}>
+        <button disabled={isFetching} onClick={incrementHandler} className={`transition w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed' : ''}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
-        <button onClick={decrementHandler} className="w-[32px] flex justify-center">
+        <input disabled={isFetching} onChange={notifyNotImplemented} className={`transition w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isFetching ? 'cursor-not-allowed' : ''}`} value={product.quantity} />
+        <button disabled={isFetching} onClick={decrementHandler} className={`transition w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed' : ''}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
@@ -151,11 +167,11 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
         </footer>
       </div>
       <div className="counter flex flex-col justify-between">
-        <button onClick={incrementHandler} className="w-[32px] flex justify-center">
+        <button disabled={isFetching} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
-        <button onClick={decrementHandler} className="w-[32px] flex justify-center">
+        <input disabled={isFetching} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${uiBlockStatus ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
+        <button disabled={isFetching} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed opacity-20' : ''}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>

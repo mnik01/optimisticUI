@@ -56,7 +56,6 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
       setIsLoading(false);
     }
   }
-  // TODO: implement animations
   const desktopLayout = (
     <article className="
       lg:w-[768px] w-[656px]

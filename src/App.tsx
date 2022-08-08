@@ -12,7 +12,7 @@ export default function App() {
     stickers: [],
     name: "Пылесос Tefal TW-7272EA",
     imgPath: "../../assets/product.png",
-    quantity: 1,
+    quantity: 5,
     sku: "2864",
     pricesPerOne: {
       price: 94_990,

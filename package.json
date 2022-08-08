@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.1",
+    "@types/lodash": "^4.14.182",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-toastify": "^9.0.8"
