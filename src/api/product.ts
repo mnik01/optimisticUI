@@ -1,4 +1,4 @@
-import { Product } from "../components/Card/types";
+import { Product, Stickers } from "../components/Card/types";
 
 const benifits = [
   {
@@ -14,7 +14,7 @@ const benifits = [
     backgroundColor: "#F55151",
   }
 ]
-const stickers =  [
+const stickers: Stickers =  [
   {
     icon: 'digitalProduct',
     text: "Цифровой товар",
