@@ -5,9 +5,9 @@ import { Product } from "./components/Card/types";
 import CardLoaders from "./components/CardLoaders";
 import CardOptimistic from "./components/CardOptimistic";
 import { useEffect, useState } from "react";
+import { useIsMobile } from "./hooks/useIsMobile";
 
 // TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
-// TODO: hide desktop in mobile design
 // TODO: add input implementation in loades and optimistic
 // TODO: set input type number
 // TODO: add polling
@@ -34,6 +34,7 @@ export default function App() {
   const toggleCaseHandler = () => {
     setIsNegativeCase(!isNegativeCase)
   }
+  const isMobile = useIsMobile();
 
 
 
@@ -42,33 +43,42 @@ export default function App() {
       <div className="p-8 min-w-fit flex flex-col gap-8 bg-gray-100">
         <h1 className="min-w-fit bg-gray-100 text-[48px] font-bold text-gray-00">Карточка товара</h1>
         <div className="flex items-center gap-8">
+          {
+            !isMobile &&
           <div className="flex flex-col gap-1">
             <span className="text-xs text-gray-500">Не optimistic (текущее положение дел на &nbsp;<a className="text-blue-300" href="https://www.technodom.kz">technodom.kz</a>)</span>
-            <Card product={product} />
+            <Card isMobile={isMobile} product={product} />
           </div>
+          }
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-gray-500">Мобилка не optimistic</p>
-            <Card product={product} foreceMobile />
+            <p className="text-xs text-gray-500">{isMobile ? 'Не optimistic' : 'Мобилка не optimistic'}</p>
+            <Card isMobile={isMobile} product={product} foreceMobile />
           </div>
         </div>
         <div className="flex items-center gap-8">
+          {
+            !isMobile &&
           <div className="flex flex-col gap-1">
             <span className="text-xs text-gray-500">Не optimistic с лоадером</span>
-            <CardLoaders product={product} />
+            <CardLoaders isMobile={isMobile} product={product} />
           </div>
+          }
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-gray-500">Мобилка не optimistic с лоадерами</p>
-            <CardLoaders product={product} foreceMobile />
+            <p className="text-xs text-gray-500">{isMobile ? 'Не optimistic с лоадерами' : 'Мобилка не optimistic с лоадерами'}</p>
+            <CardLoaders isMobile={isMobile} product={product} foreceMobile />
           </div>
         </div>
         <div className="flex items-center gap-8">
+          {
+            !isMobile &&
           <div className="flex flex-col gap-1">
             <span className="text-xs text-gray-500">Optimistic</span>
-            <CardOptimistic product={product} />
+            <CardOptimistic isMobile={isMobile} product={product} />
           </div>
+          }
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-gray-500">Мобилка optimistic</p>
-            <CardOptimistic product={product} foreceMobile />
+            <p className="text-xs text-gray-500">{isMobile ? 'Optimistic' : 'Мобилка optimistic'}</p>
+            <CardOptimistic isMobile={isMobile} product={product} foreceMobile />
           </div>
         </div>
         <div className="flex gap-8 justify-center">

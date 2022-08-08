@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import BenifitList from "./parts/BenifitList";
 import StickerList from "./parts/StickerList";
 import { Product } from "./types";
@@ -7,11 +6,10 @@ import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
 
-type CardProps = { foreceMobile?: boolean, product: Product }
+type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean}
 
 // Баг в проде технодома. Если кликнуть на плюс быстро два раза то значение после ответа сервера увелится лишь на 1
-export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
-  const isMobile = useIsMobile();
+export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct, isMobile }) => {
   const [product, setProduct] = useState(initialProduct);
 
   const priceTotal = product.pricesPerOne.price * product.quantity;

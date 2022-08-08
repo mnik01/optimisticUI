@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-import { useIsMobile } from "../../hooks/useIsMobile";
 import BenifitList from "./parts/BenifitList";
 import StickerList from "./parts/StickerList";
 import { Product } from "./types";
@@ -7,10 +6,9 @@ import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
 
-type CardProps = { foreceMobile?: boolean, product: Product }
+type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean}
 
-export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
-  const isMobile = useIsMobile();
+export const CardLoaders: FC<CardProps> = ({ foreceMobile, isMobile, product: initialProduct }) => {
   const [product, setProduct] = useState(initialProduct);
   const [isLoading, setIsLoading] = useState(false);
 

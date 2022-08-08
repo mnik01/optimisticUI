@@ -1,4 +1,3 @@
-import { useIsMobile } from "../../hooks/useIsMobile";
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
 import BenifitList from "./parts/BenifitList";
@@ -8,10 +7,9 @@ import { toast } from 'react-toastify';
 import { Product } from "./types";
 import { debounce } from "lodash";
 
-type CardProps = { foreceMobile?: boolean, product: Product }
+type CardProps = { foreceMobile?: boolean, product: Product, isMobile: boolean }
 
-export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
-  const isMobile = useIsMobile();
+export const CardOptimistic: FC<CardProps> = ({ foreceMobile, isMobile, product: initialProduct }) => {
   const [product, setProduct] = useState(initialProduct);
   const [uiBlockStatus, setUiBlockStatus] = useState<"clicking" | 'fetching' | null>(null);
 
