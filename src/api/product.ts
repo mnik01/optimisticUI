@@ -37,7 +37,7 @@ const stickers =  [
 
 export const patchProduct = async (product: Product): Promise<Product> => {
   const data = await fetch(`https://jsonplaceholder.typicode.com/todos/${product.quantity}`).then((res) => res.json());
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   const { quantity } = product
 

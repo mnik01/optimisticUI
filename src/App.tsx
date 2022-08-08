@@ -5,6 +5,11 @@ import { Product } from "./components/Card/types";
 import CardLoaders from "./components/CardLoaders";
 import CardOptimistic from "./components/CardOptimistic";
 
+// TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
+// TODO: hide desktop in mobile design
+// TODO: add input implementation
+// TODO: add polling
+// TODO: add negative case
 
 export default function App() {
   const product: Product = {
@@ -25,33 +30,41 @@ export default function App() {
 
   return (
     <div>
-      <div className="p-8 flex flex-col gap-8 bg-gray-100">
-        <div>
-          <span className="text-xs text-gray-500">Product Card non-optimistic (currently on &nbsp;<a className="text-blue-300" href="https://www.technodom.kz">technodom.kz</a>)</span>
-          <Card product={product} />
-        </div>
-        <div>
-          <p className="text-xs text-gray-500">Product Card non-optimistic with loaders</p>
-          <CardLoaders product={product} />
-        </div>
-        <div>
-          <p className="text-xs text-gray-500">Product Card optimistic</p>
-          <CardOptimistic product={product} />
-        </div>
-        <hr />
-        <div className="flex gap-12">
-          <div>
-            <p className="text-xs text-gray-500">Mobile Product Card non-optimistic (currently on &nbsp;<a className="text-blue-300" href="https://www.technodom.kz">technodom.kz</a>)</p>
+      <div className="p-8 min-w-fit flex flex-col gap-8 bg-gray-100">
+        <h1 className="min-w-fit bg-gray-100 text-[48px] font-bold text-gray-00">Карточка товара</h1>
+        <div className="flex items-center gap-8">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-gray-500">Не optimistic (текущее положение дел на &nbsp;<a className="text-blue-300" href="https://www.technodom.kz">technodom.kz</a>)</span>
+            <Card product={product} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-gray-500">Мобилка не optimistic</p>
             <Card product={product} foreceMobile />
           </div>
-          <div>
-            <p className="text-xs text-gray-500">Mobile Product Card non-optimistic with loaders</p>
+        </div>
+        <div className="flex items-center gap-8">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-gray-500">Не optimistic с лоадером</span>
+            <CardLoaders product={product} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-gray-500">Мобилка не optimistic с лоадерами</p>
             <CardLoaders product={product} foreceMobile />
           </div>
-          <div>
-            <p className="text-xs text-gray-500">Mobile Product Card optimistic</p>
+        </div>
+        <div className="flex items-center gap-8">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-gray-500">Optimistic</span>
+            <CardOptimistic product={product} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-gray-500">Мобилка optimistic</p>
             <CardOptimistic product={product} foreceMobile />
           </div>
+        </div>
+        <div className="flex gap-8 justify-center">
+          <button className="text-[#2196f3] font-light outline-1">Посмотреть на bad-case</button>
+          <a href="https://simonhearne.com/2021/optimistic-ui-patterns/#feedback-first" className="text-[#2196f3] font-light outline-1">Прочитать про optimistic UI</a>
         </div>
       </div>
       <ToastContainer />
