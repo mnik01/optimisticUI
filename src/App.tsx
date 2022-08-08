@@ -6,11 +6,11 @@ import CardLoaders from "./components/CardLoaders";
 import CardOptimistic from "./components/CardOptimistic";
 import { useEffect, useState } from "react";
 import { useIsMobile } from "./hooks/useIsMobile";
+import { submitPolling } from "./api/polling";
 
 // TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
 // TODO: add input implementation in loades and optimistic
 // TODO: set input type number
-// TODO: add polling
 
 export default function App() {
   const product: Product = {
@@ -36,6 +36,15 @@ export default function App() {
   }
   const isMobile = useIsMobile();
 
+  const [selectedVariant, setSelectedVariant] = useState<null | string>(null)
+  const [votes, setVotes] = useState<null | {value: string, percent: number}[]>(null)
+
+
+  const chooseVariantHandler = async (variant: string) => {
+    const { votes } = await submitPolling(variant)
+    setSelectedVariant(variant)
+    setVotes(votes.map(vote => ({value: vote.title, percent: vote.votedPercent})))
+  }
 
 
   return (
@@ -86,6 +95,32 @@ export default function App() {
             isNegativeCase ? "Вернуться к положительному кейсу" : "Показать негативный кейс"
           }</button>
           <a href="https://simonhearne.com/2021/optimistic-ui-patterns/#feedback-first" className="text-[#2196f3] font-light outline-1">Прочитать про optimistic UI</a>
+        </div>
+
+
+
+
+        <div className="mb-16">
+          <p className="mb-2">
+            { votes ? "Вот за какие голосовали:" : "Какой вариант тебе нравится больше?"}
+          </p>
+          <div className="w-fit p-4 flex gap-8 bg-white rounded-xl">
+            <button onClick={() => {chooseVariantHandler("Не optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Не optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
+              {
+                votes ? `${votes.find(vote => vote.value === "Не optimistic")?.percent || 0}%` : "Не optimistic"
+              }
+            </button>
+            <button onClick={() => {chooseVariantHandler("Не optimistic с лоадерами")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Не optimistic с лоадерами" || 'text-orange-400'} hover:text-orange-400 transition`}>
+              {
+                votes ? `${votes.find(vote => vote.value === "Не optimistic с лоадерами")?.percent || 0}%` : "Не optimistic с лоадерами"
+              }
+            </button>
+            <button onClick={() => {chooseVariantHandler("Optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
+              {
+                votes ? `${votes.find(vote => vote.value === "Optimistic")?.percent || 0}%` : "Optimistic"
+              }
+            </button>
+          </div>
         </div>
       </div>
       <ToastContainer />
