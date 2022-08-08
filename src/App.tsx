@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 
 // TODO: add tooltip: скорость ответа от серва одинаковая во всех подходах
 // TODO: hide desktop in mobile design
-// TODO: add input implementation
+// TODO: add input implementation in loades and optimistic
+// TODO: set input type number
 // TODO: add polling
 
 export default function App() {

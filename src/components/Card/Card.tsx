@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import BenifitList from "./parts/BenifitList";
 import StickerList from "./parts/StickerList";
@@ -51,6 +51,24 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
     }
   }
 
+  const inputChangeHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const quantity = parseInt(event.target.value, 10);
+
+    if (quantity < 1) {
+      notifyNotImplemented()
+      return;
+    }
+    try {
+      const newProduct = {...product, quantity}
+      const patchedProduct = await patchProduct(newProduct)
+      setProduct(patchedProduct)
+
+      notifySuccess('Success')
+    } catch (error) {
+      notifyError('Some network error occurred')
+    }
+  }
+
   const desktopLayout = (
     <article className="
       lg:w-[768px] w-[656px]
@@ -93,7 +111,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
         <button onClick={incrementHandler} className="w-[32px] flex justify-center">
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
+        <input onChange={inputChangeHandler} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
         <button onClick={decrementHandler} className="w-[32px] flex justify-center">
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
@@ -133,7 +151,7 @@ export const Card: FC<CardProps> = ({ foreceMobile, product: initialProduct }) =
         <button onClick={incrementHandler} className="w-[32px] flex justify-center">
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input onChange={notifyNotImplemented} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
+        <input onChange={inputChangeHandler} className="w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold" value={product.quantity} />
         <button onClick={decrementHandler} className="w-[32px] flex justify-center">
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
