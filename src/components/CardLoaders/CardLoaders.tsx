@@ -5,7 +5,7 @@ import StickerList from "./parts/StickerList";
 import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
-import { patchProduct as patchProduct } from "../../api/product";
+import { patchProduct } from "../../api/product";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
 
@@ -20,7 +20,6 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
   const notifySuccess = (text: string) => toast(text, {type: "success"});
   const notifyError = (text: string) => toast(text, {type: "error"});
   const notifyNotImplemented = () => {notifyError("Not implemented")}
-
 
 
   const incrementHandler = async (): Promise<void> => {
@@ -72,8 +71,8 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
         <button onClick={notifyNotImplemented} className="uppercase w-full h-5 text-[8px] text-[#B2B2B2] font-bold tracking-widest text-center py-1">удалить</button>
       </div>
       <main className="flex justify-between w-full">
-        <div className="flex justify-center flex-col gap-1">
-          <div className={isLoading ? 'opacity-20' : ''}><StickerList stickers={product.stickers} /></div>
+        <div className={`flex justify-center flex-col gap-1 transition ${!isLoading || 'opacity-20'}`}>
+          <StickerList stickers={product.stickers} />
           <div>
             <h2 style={{color: '#404040'}} className="text-base font-[700]">{product.name}</h2>
             <span className="flex items-end gap-1">
@@ -83,7 +82,7 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
               <p className="text-[10px] font-medium line-through text-[#B2B2B2] h-5 flex items-end leading-[15px]">{formatPrice(product.pricesPerOne.price)}</p>
             </span>
           </div>
-          <div className={isLoading ? 'opacity-20' : ''}><BenifitList benifits={product.benifits} /></div>
+          <BenifitList benifits={product.benifits} />
         </div>
         <div className='flex items-center'>
           <span className="flex flex-col gap-1">
@@ -95,11 +94,11 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
         </div>
       </main>
       <div className="counter flex flex-col justify-between">
-        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
-        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold transition ${!isLoading || 'cursor-not-allowed opacity-20'}`} value={product.quantity} />
+        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
@@ -119,7 +118,7 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
               <img alt={`product image ${product.name}`} src={product.imgPath} />
             </div>
           </div>
-          <div className="flex gap-1 flex-col">
+          <div className={`flex gap-1 flex-col transition ${!isLoading || 'opacity-20'}`}>
             <h2 style={{color: '#404040'}} className="text-xs font-bold">{product.name}</h2>
             <BenifitList benifits={product.benifits} />
           </div>
@@ -135,11 +134,11 @@ export const CardLoaders: FC<CardProps> = ({ foreceMobile, product: initialProdu
         </footer>
       </div>
       <div className="counter flex flex-col justify-between">
-        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <button disabled={isLoading} onClick={incrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
-        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isLoading ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <input disabled={isLoading} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold transition ${!isLoading || 'cursor-not-allowed opacity-20'}`} value={product.quantity} />
+        <button disabled={isLoading} onClick={decrementHandler} className={`w-[32px] flex justify-center transition ${!isLoading || 'cursor-not-allowed opacity-20'}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>

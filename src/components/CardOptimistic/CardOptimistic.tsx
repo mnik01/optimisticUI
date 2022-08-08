@@ -1,16 +1,14 @@
-import { FC, useState, useRef } from "react";
 import { useIsMobile } from "../../hooks/useIsMobile";
-import BenifitList from "./parts/BenifitList";
-import StickerList from "./parts/StickerList";
-import { Product } from "./types";
-import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
 import { patchProduct } from "../../api/product";
+import BenifitList from "./parts/BenifitList";
+import StickerList from "./parts/StickerList";
+import { FC, useState, useRef } from "react";
+import { toast } from 'react-toastify';
+import { Product } from "./types";
 import { debounce } from "lodash";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
-
-
 
 export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialProduct }) => {
   const isMobile = useIsMobile();
@@ -48,7 +46,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
       operations.current = [];
       setUiBlockStatus(null)
     }
-  }, 1000)).current;
+  }, 400)).current;
 
 
   const incrementHandler = async (): Promise<void> => {
@@ -85,8 +83,11 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
     debouncedHandler()
   }
 
-  const isInteracting = uiBlockStatus === 'clicking';
-  const isFetching = uiBlockStatus === 'fetching';
+  const isFetching = uiBlockStatus === 'fetching'
+  const opacity = {
+    content: uiBlockStatus === 'clicking' ? 'opacity-50' : uiBlockStatus !== "fetching" || 'opacity-20',
+    counter: !isFetching || 'cursor-not-allowed opacity-20',
+  }
 
   const desktopLayout = (
     <article className="
@@ -101,37 +102,71 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
             <img alt={`product image ${product.name}`} src={product.imgPath} />
           </div>
         </div>
-        <button onClick={notifyNotImplemented} className="uppercase w-full h-5 text-[8px] text-[#B2B2B2] font-bold tracking-widest text-center py-1">удалить</button>
+        <button
+          onClick={notifyNotImplemented}
+          className="uppercase w-full h-5 text-[8px]
+          text-[#B2B2B2] font-bold
+          tracking-widest text-center py-1"
+        >
+          удалить
+        </button>
       </div>
       <main className="flex justify-between w-full">
-        <div className={`transition flex justify-center flex-col gap-1 ${uiBlockStatus ? 'opacity-20' : ''}`}>
+        <div className={`transition flex justify-center flex-col gap-1 ${opacity.content}`}>
           <StickerList stickers={product.stickers} />
           <div>
             <h2 style={{color: '#404040'}} className="text-base font-[700]">{product.name}</h2>
             <span className="flex items-end gap-1">
               {product.pricesPerOne.oldPrice &&
-                <p className="text-sm text-[#B2B2B2] font-bold h-5 flex items-end">{formatPrice(product.pricesPerOne.oldPrice)}</p>
+                <p className="text-sm text-[#B2B2B2] font-bold h-5 flex items-end">
+                  {formatPrice(product.pricesPerOne.oldPrice)}
+                </p>
               }
-              <p className="text-[10px] font-medium line-through text-[#B2B2B2] h-5 flex items-end leading-[15px]">{formatPrice(product.pricesPerOne.price)}</p>
+              <p
+                className="text-[10px] font-medium line-through
+                text-[#B2B2B2] h-5 flex
+                items-end leading-[15px]"
+              >
+                {formatPrice(product.pricesPerOne.price)}
+              </p>
             </span>
           </div>
           <BenifitList benifits={product.benifits} />
         </div>
         <div className='flex items-center'>
           <span className="flex flex-col gap-1">
-            <p className="text-xl font-bold text-orange-400 h-5 flex items-end leading-[15px]">{formatPrice(priceTotal)}</p>
+            <p className="text-xl font-bold text-orange-400 h-5 flex items-end leading-[15px]">
+              {formatPrice(priceTotal)}
+            </p>
             {oldPriceTotal &&
-              <p className="text-[10px] text-[#737171] font-medium h-5 flex line-through justify-end">{formatPrice(oldPriceTotal)}</p>
+              <p className="text-[10px] text-[#737171] font-medium h-5 flex line-through justify-end">
+                {formatPrice(oldPriceTotal)}
+              </p>
             }
           </span>
         </div>
       </main>
-      <div className={`transition counter flex flex-col justify-between ${isFetching ? 'opacity-20' : ''}`}>
-        <button disabled={isFetching} onClick={incrementHandler} className={`transition w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed' : ''}`}>
+      <div className={`counter flex flex-col justify-between`}>
+        <button
+          disabled={isFetching}
+          onClick={incrementHandler}
+          className={`${opacity.counter} transition w-[32px] flex justify-center`}
+        >
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input disabled={isFetching} onChange={notifyNotImplemented} className={`transition w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${isFetching ? 'cursor-not-allowed' : ''}`} value={product.quantity} />
-        <button disabled={isFetching} onClick={decrementHandler} className={`transition w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed' : ''}`}>
+        <input
+          disabled={isFetching}
+          onChange={notifyNotImplemented}
+          className={`${opacity.counter} transition w-[32px] bg-transparent
+          flex justify-center text-center
+          text-[#161616] font-bold`}
+          value={product.quantity}
+        />
+        <button
+          disabled={isFetching}
+          onClick={decrementHandler}
+          className={`${opacity.counter} transition w-[32px] flex justify-center`}
+        >
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>
@@ -151,7 +186,7 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
               <img alt={`product image ${product.name}`} src={product.imgPath} />
             </div>
           </div>
-          <div className="flex gap-1 flex-col">
+          <div className={`transition flex gap-1 flex-col ${opacity.content}`}>
             <h2 style={{color: '#404040'}} className="text-xs font-bold">{product.name}</h2>
             <BenifitList benifits={product.benifits} />
           </div>
@@ -167,11 +202,11 @@ export const CardOptimistic: FC<CardProps> = ({ foreceMobile, product: initialPr
         </footer>
       </div>
       <div className="counter flex flex-col justify-between">
-        <button disabled={isFetching} onClick={incrementHandler} className={`w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <button disabled={isFetching} onClick={incrementHandler} className={`transition w-[32px] flex justify-center ${opacity.counter}`}>
           <img src="../../assets/icons/plus.svg" alt="increase button image" />
         </button>
-        <input disabled={isFetching} onChange={notifyNotImplemented} className={`w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${uiBlockStatus ? 'cursor-not-allowed opacity-20' : ''}`} value={product.quantity} />
-        <button disabled={isFetching} onClick={decrementHandler} className={`w-[32px] flex justify-center ${isFetching ? 'cursor-not-allowed opacity-20' : ''}`}>
+        <input disabled={isFetching} onChange={notifyNotImplemented} className={`transition w-[32px] bg-transparent flex justify-center text-center text-[#161616] font-bold ${opacity.counter}`} value={product.quantity} />
+        <button disabled={isFetching} onClick={decrementHandler} className={`transition w-[32px] flex justify-center ${opacity.counter}`}>
           <img src="../../assets/icons/minus.svg" alt="decrease button image" />
         </button>
       </div>

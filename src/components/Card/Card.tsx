@@ -5,7 +5,7 @@ import StickerList from "./parts/StickerList";
 import { Product } from "./types";
 import { toast } from 'react-toastify';
 import { formatPrice } from "../../utils/formatPrice";
-import { patchProduct as patchProduct } from "../../api/product";
+import { patchProduct } from "../../api/product";
 
 type CardProps = { foreceMobile?: boolean, product: Product }
 

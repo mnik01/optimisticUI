@@ -41,9 +41,6 @@ export const patchProduct = async (product: Product): Promise<Product> => {
 
   const { quantity } = product
 
-  // if (Math.random() > 0.5) {
-    throw new Error('Thats fine')
-  // }
 
   if (quantity === 2) {
     return {
