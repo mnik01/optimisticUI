@@ -107,10 +107,10 @@ export default function App() {
           <p className="mb-2">
             { votes ? "Вот за какие голосовали:" : "Какой вариант тебе нравится больше?"}
           </p>
-          <div className="w-fit p-4 flex gap-8 bg-white rounded-xl">
-            <button onClick={() => {chooseVariantHandler("Не optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Не optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
+          <div className="w-fit p-4 flex flex-col gap-8 bg-white rounded-xl">
+            <button onClick={() => {chooseVariantHandler("Optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
               {
-                votes ? `${votes.find(vote => vote.value === "Не optimistic")?.percent || 0}%` : "Не optimistic"
+                votes ? `${votes.find(vote => vote.value === "Optimistic")?.percent || 0}%` : "Optimistic"
               }
             </button>
             <button onClick={() => {chooseVariantHandler("Не optimistic с лоадерами")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Не optimistic с лоадерами" || 'text-orange-400'} hover:text-orange-400 transition`}>
@@ -118,9 +118,9 @@ export default function App() {
                 votes ? `${votes.find(vote => vote.value === "Не optimistic с лоадерами")?.percent || 0}%` : "Не optimistic с лоадерами"
               }
             </button>
-            <button onClick={() => {chooseVariantHandler("Optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
+            <button onClick={() => {chooseVariantHandler("Не optimistic")}} className={`outline w-[220px] outline-2 rounded-md p-2 outline-gray-200 ${selectedVariant !== "Не optimistic" || 'text-orange-400'} hover:text-orange-400 transition`}>
               {
-                votes ? `${votes.find(vote => vote.value === "Optimistic")?.percent || 0}%` : "Optimistic"
+                votes ? `${votes.find(vote => vote.value === "Не optimistic")?.percent || 0}%` : "Не optimistic"
               }
             </button>
           </div>
